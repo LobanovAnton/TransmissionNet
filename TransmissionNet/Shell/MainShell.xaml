@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TransmissionNet.Shell.MainShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="using:TransmissionNet.Converters"
+    xmlns:torrents="using:TransmissionNet.Torrents"
+    xmlns:settings="using:TransmissionNet.Settings"
+    xmlns:shell="using:TransmissionNet.Shell"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    FlyoutBehavior="Flyout"
+    FlyoutWidth="320"
+    FlyoutBackgroundColor ="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"
+    FlyoutBackdrop="#90000000"
+    PresentationMode="ModalAnimated"
+    x:Name="Menu"
+    Title="TransmissionNet"
+    BindingContext="{x:StaticResource MainShellViewModel}">
+    
+    <Shell.Resources>
+        <ResourceDictionary>
+            <toolkit:VariableMultiValueConverter 
+                x:Key="VariableMultiValueConverter"
+                ConditionType="Any" />
+        </ResourceDictionary>
+    </Shell.Resources>
+    
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid x:DataType="FlyoutItem" ColumnDefinitions="Auto, *" BackgroundColor="Transparent"
+                  ColumnSpacing="10"
+                  StyleClass="FlyoutItemLayoutStyle">
+                <Image  Source="{Binding FlyoutIcon}"
+                                         Aspect="AspectFit"
+                                         Margin="5"
+                                         HeightRequest="36"
+                                         WidthRequest="36"
+                                         HorizontalOptions="Center"/>
+                <Label x:Name="FlyoutItemLabel"
+                       StyleClass="FlyoutItemLabelStyle"
+                       Grid.Column="1"
+                       Text="{Binding Title}"
+                       FontSize="16"
+                       HorizontalTextAlignment="Start"
+                       VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+    
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource OffBlack}}">
+            <Image Aspect="AspectFit"
+                   Source="appimage.png"
+                   HeightRequest="185" />
+        </Grid>
+    </Shell.FlyoutHeader>
+    
+    <Shell.FlyoutFooter>
+        <Label x:DataType="shell:MainShellViewModel"
+               VerticalOptions="Center"
+               VerticalTextAlignment="Center"
+               HorizontalTextAlignment="Center"
+               FontFamily="OpenSansSemibold"
+               HeightRequest="36"
+               MinimumHeightRequest="36"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+            <Label.Text>
+                <MultiBinding StringFormat="Free space: {0}"
+                              Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                    <Binding Source="{x:StaticResource MainShellViewModel}"
+                             Path="FreeSpace"/>
+                    <Binding Source="{x:StaticResource MainShellViewModel}"
+                             Path="MemoryUnits"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+    </Shell.FlyoutFooter>
+
+    <Shell.TitleView>
+        <Grid x:DataType="torrents:TorrentsViewModel" ColumnDefinitions="Auto, *"
+              Padding="10, 10" ColumnSpacing="5">
+            <Label x:DataType="Shell"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   HorizontalTextAlignment="Start"
+                   VerticalTextAlignment="Center"
+                   LineBreakMode="TailTruncation"
+                   Text="{Binding Source={x:Reference Menu}, Path=CurrentItem.Title}"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="20"
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+            </Label>
+            <ActivityIndicator x:DataType="shell:ShellPageViewModel" Grid.Column="1" 
+                               HorizontalOptions="End">
+                <ActivityIndicator.IsRunning>
+                    <MultiBinding Converter="{x:StaticResource VariableMultiValueConverter}">
+                        <Binding Source="{x:StaticResource MainShellViewModel}" Path="IsRunning" Mode="OneWay"/>
+                        <Binding Source="{x:StaticResource TorrentsViewModel}" Path="IsRunning" Mode="OneWay"/>
+                        <Binding Source="{x:StaticResource FilterSortingViewModel}" Path="IsRunning" Mode="OneWay"/>
+                        <Binding Source="{x:StaticResource StatisticsViewModel}" Path="IsRunning" Mode="OneWay"/>
+                        <Binding Source="{x:StaticResource AppSettingsViewModel}" Path="IsRunning" Mode="OneWay"/>
+                        <Binding Source="{x:StaticResource ServerSettingsViewModel}" Path="IsRunning" Mode="OneWay"/>
+                        <Binding Source="{x:StaticResource FilePageViewModel}" Path="IsRunning" Mode="OneWay"/>
+                    </MultiBinding>
+                </ActivityIndicator.IsRunning>
+            </ActivityIndicator>
+        </Grid>
+    </Shell.TitleView>
+
+    <FlyoutItem Title="Torrents" Route="torrents">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" Glyph="&#xECD0;"/>
+        </FlyoutItem.FlyoutIcon>
+        <ShellSection x:DataType="ShellSection" Title="Torrents list" Route="list">
+            <ShellSection.Icon>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" Glyph="&#xECD0;"/>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate torrents:TorrentsPage}"/>
+        </ShellSection>
+        <ShellSection x:DataType="ShellSection" Title="File list" Route="file"
+                      IsVisible="{Binding x:DataType=torrents:FilePageViewModel, Source={x:StaticResource FilePageViewModel},
+                         Path=Torrent, Mode=OneWay, Converter={toolkit:IsNotNullConverter}}">
+            <ShellSection.Icon>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" Glyph="&#xECD0;"/>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate torrents:FilePage}"/>
+        </ShellSection>
+        <ShellSection x:DataType="ShellSection" Title="Filter and sorting" Route="filter">
+            <ShellSection.Icon>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="DarkCyan" Glyph="&#xEC16;"/>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate torrents:FilterSorting}"/>
+        </ShellSection>
+        <ShellSection x:DataType="ShellSection" Title="Statistics" Route="statistics">
+            <ShellSection.Icon>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="Peru" Glyph="&#xEE0B;"/>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate torrents:StatisticsPage}"/>
+        </ShellSection>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Settings" Route="settings">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource FontFamily="Ionicons" Size="32" Color="Peru" Glyph="&#xEE80;"/>
+        </FlyoutItem.FlyoutIcon>
+        <ShellSection x:DataType="ShellSection" Title="Application Settings" Route="app">
+            <ShellSection.Icon>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" Glyph="&#xEA24;"/>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate settings:AppSettingsPage}"/>
+        </ShellSection>
+        <ShellSection x:DataType="ShellSection" Title="Server Settings" Route="server">
+            <ShellSection.Icon>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="Peru" Glyph="&#xEE7D;"/>
+            </ShellSection.Icon>
+            <ShellContent ContentTemplate="{DataTemplate settings:ServerSettingsPage}"/>
+        </ShellSection>
+    </FlyoutItem>
+</Shell>

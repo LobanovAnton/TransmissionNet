@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:torrents="using:TransmissionNet.Torrents"
+             xmlns:converters="using:TransmissionNet.Converters"
+             x:Class="TransmissionNet.Torrents.FilterSorting"
+             BindingContext="{StaticResource FilterSortingViewModel}">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:EnumToIntConverter
+                x:Key="EnumToIntConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid x:DataType="torrents:FilterSortingViewModel" 
+          ColumnSpacing="10" RowSpacing="10" 
+          Padding="5, 5"
+          HorizontalOptions="Center"
+          ColumnDefinitions="Auto, Auto, Auto"
+          RowDefinitions="Auto, Auto, Auto">
+        <Grid Grid.Row="0" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEC16;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Filter by state" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Picker Grid.Row="0" Grid.Column="1" HorizontalOptions="Fill"
+                SelectedIndex="{Binding FilterState, Mode=TwoWay, 
+                Converter={x:StaticResource EnumToIntConverter},
+                ConverterParameter={x:Type torrents:FilterState}}"
+                ItemsSource="{Binding FilterNames, Mode=OneWay}">
+        </Picker>
+        <Grid Grid.Row="1" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="DarkCyan" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEEB0;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Sorting by property" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Picker Grid.Row="1" Grid.Column="1" HorizontalOptions="Fill"
+                SelectedIndex="{Binding SortRule, Mode=TwoWay,
+                Converter={x:StaticResource EnumToIntConverter},
+                ConverterParameter={x:Type torrents:SortRule}}"
+                ItemsSource="{Binding SortRuleNames, Mode=OneWay}">
+        </Picker>
+        <ImageButton Grid.Row="1" Grid.Column="2" HorizontalOptions="Start" VerticalOptions="Center"
+                     Clicked="SortModeOnClicked">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="Ionicons" Size="32" Color="{AppThemeBinding Light={x:StaticResource Primary},
+                                                                                                                     Dark={x:StaticResource PrimaryDark}}"
+                                 FontAutoScalingEnabled="false"
+                                 Glyph="{Binding SortMode, Converter={x:Static converters:SortModeToGlyphConverter.Instance}}"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Grid Grid.Row="2" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="Peru" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEC3A;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Filter by folder" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Picker Grid.Row="2" Grid.Column="1" HorizontalOptions="Fill"
+                SelectedIndex="{Binding PathIndex, Mode=TwoWay}"
+                ItemsSource="{Binding Path=Paths, Mode=OneWay,
+                                      Converter={x:Static converters:FullPathToName.Instance}}">
+        </Picker>
+    </Grid>
+</ContentPage>

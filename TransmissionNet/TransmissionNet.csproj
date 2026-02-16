@@ -1,0 +1,101 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+
+        <OutputType>Exe</OutputType>
+        <RootNamespace>TransmissionNet</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+        <ApplicationDisplayVersion>1.3.5</ApplicationDisplayVersion>
+        <ApplicationVersion>1.3.5</ApplicationVersion>
+
+        <!-- Display name -->
+        <ApplicationTitle>TransmissionNet</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>lobanov.transmissionnet</ApplicationId>
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">26.1</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">26.1</SupportedOSPlatformVersion>
+        <NeutralLanguage>en</NeutralLanguage>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- App Icon -->
+        <MauiIcon Include="Resources\AppIcon\appicon.png"/>
+
+        <!-- Splash Screen -->
+        <MauiSplashScreen Include="Resources\Splash\appiconfg.png"/>
+
+        <!-- Images -->
+        <MauiImage Include="Resources\Images\*" Resize="True" BaseSize="185,185"/>
+
+        <!-- Custom Fonts -->
+        <MauiFont Include="Resources\Fonts\*"/>
+
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Maui" Version="14.0.0" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.40" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.40" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Maui.Core" Version="10.0.40" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiXaml Update="TorrentPage\TorrentsPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Shell\MainShell.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="App\App.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Settings\AppSettingsPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="TorrentPage\TorrentsPage.xaml.cs">
+        <DependentUpon>MainPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Shell\MainShell.xaml.cs">
+        <DependentUpon>AppShell.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="App\App.xaml.cs">
+        <DependentUpon>App.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Settings\AppSettingsPage.xaml.cs">
+        <DependentUpon>TorrentsPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Splash\" />
+      <Folder Include="Utils\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Transmission.API.RPC.NET\Transmission.API.RPC.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:settings="using:TransmissionNet.Settings"
+             x:Class="TransmissionNet.Settings.AppSettingsPage"
+             BindingContext="{StaticResource AppSettingsViewModel}">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary Source="SettingsResource.xaml"/>
+    </ContentPage.Resources>
+    <Grid RowSpacing="5"
+          Padding="5, 5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <CollectionView x:DataType="settings:AppSettingsViewModel"
+                        SelectionMode="None"
+                        ItemsUpdatingScrollMode="KeepScrollOffset"
+                        ItemsSource="{Binding SettingsCollection}"
+                        ItemTemplate="{StaticResource ValueTypeSelector}"
+                        ItemSizingStrategy="MeasureFirstItem">
+        </CollectionView>
+        <Label x:DataType="settings:AppSettingsViewModel" Grid.Row="1" 
+               Text="{Binding Version, 
+               StringFormat='Application version: {0}'}"
+               Style="{x:StaticResource StatisticHeader}"
+               HorizontalOptions="Center">
+        </Label>
+    </Grid>
+</ContentPage>

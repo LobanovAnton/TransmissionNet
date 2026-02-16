@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shell="using:TransmissionNet.Shell"
+             xmlns:torrents="using:TransmissionNet.Torrents"
+             xmlns:converters="using:TransmissionNet.Converters"
+             x:Class="TransmissionNet.Torrents.StatisticsPage"
+             BindingContext="{StaticResource StatisticsViewModel}">
+    <Grid x:DataType="torrents:StatisticsViewModel"
+          RowSpacing="20" ColumnSpacing="20"
+          Padding="5, 5"
+          HorizontalOptions="Center"
+          RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+          ColumnDefinitions="Auto, *, *">
+        <Label Grid.Row="0" Grid.Column="1" Text="Current session" Style="{StaticResource StatisticHeader}"/>
+        <Label Grid.Row="0" Grid.Column="2" Text="Total" Style="{StaticResource StatisticHeader}"/>
+        <Grid Grid.Row="1" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0"
+                   HorizontalOptions="Center"
+                   WidthRequest="24"
+                   HeightRequest="24">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEA4E;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Uploaded" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0"
+                   HorizontalOptions="Center"
+                   WidthRequest="24"
+                   HeightRequest="24">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="DarkCyan" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEA30;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Downloaded" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0"
+                   HorizontalOptions="Center"
+                   WidthRequest="24"
+                   HeightRequest="24">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="#713CE3" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEEF2;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Running time" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0"
+                   HorizontalOptions="Center"
+                   WidthRequest="24"
+                   HeightRequest="24">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="Peru" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEC07;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Files added" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="0" ColumnSpacing="10" ColumnDefinitions="Auto, Auto">
+            <Image Grid.Row="0" Grid.Column="0"
+                   HorizontalOptions="Center"
+                   WidthRequest="24"
+                   HeightRequest="24">
+                <Image.Source>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="#A91730" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xECB2;"/>
+                </Image.Source>
+            </Image>
+            <Label Grid.Row="0" Grid.Column="1" Text="Session count" Style="{StaticResource StatisticHeader}"/>
+        </Grid>
+        
+        <Label Grid.Column="1" Grid.Row="1"
+               Style="{StaticResource StatisticBody}">
+            <Label.Text>
+                <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                    <Binding Source="{x:StaticResource StatisticsViewModel}"
+                             Path="Statistic.CurrentStats.UploadedBytes"/>
+                    <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}"
+                             Path="SizeUnits"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Label Grid.Column="1" Grid.Row="2"
+               Style="{StaticResource StatisticBody}">
+            <Label.Text>
+                <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                    <Binding Source="{x:StaticResource StatisticsViewModel}"
+                             Path="Statistic.CurrentStats.DownloadedBytes"/>
+                    <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}"
+                             Path="SizeUnits"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Label Grid.Column="1" Grid.Row="3"
+               Text="{Binding Statistic.CurrentStats.SecondsActive,
+               Converter={x:Static converters:SecondsToStringTimeConverter.Instance} }"
+               Style="{StaticResource StatisticBody}"/>
+        <Label Grid.Column="1" Grid.Row="4"
+               Text="{Binding Statistic.CurrentStats.FilesAdded}"
+               Style="{StaticResource StatisticBody}"/>
+        <Label Grid.Column="1" Grid.Row="5"
+               Text="{Binding Statistic.CurrentStats.SessionCount}"
+               Style="{StaticResource StatisticBody}"/>
+        
+        <Label Grid.Column="2" Grid.Row="1"
+               Style="{StaticResource StatisticBody}">
+            <Label.Text>
+                <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                    <Binding Source="{x:StaticResource StatisticsViewModel}"
+                             Path="Statistic.CumulativeStats.UploadedBytes"/>
+                    <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}"
+                             Path="SizeUnits"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Label Grid.Column="2" Grid.Row="2"
+               Style="{StaticResource StatisticBody}">
+            <Label.Text>
+                <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                    <Binding Source="{x:StaticResource StatisticsViewModel}"
+                             Path="Statistic.CumulativeStats.DownloadedBytes"/>
+                    <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}"
+                             Path="SizeUnits"/>
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Label Grid.Column="2" Grid.Row="3"
+               Text="{Binding Statistic.CumulativeStats.SecondsActive,
+               Converter={x:Static converters:SecondsToStringTimeConverter.Instance} }"
+               Style="{StaticResource StatisticBody}"/>
+        <Label Grid.Column="2" Grid.Row="4"
+               Text="{Binding Statistic.CumulativeStats.FilesAdded}"
+               Style="{StaticResource StatisticBody}"/>
+        <Label Grid.Column="2" Grid.Row="5"
+               Text="{Binding Statistic.CumulativeStats.SessionCount}"
+               Style="{StaticResource StatisticBody}"/>
+    </Grid>
+</ContentPage>

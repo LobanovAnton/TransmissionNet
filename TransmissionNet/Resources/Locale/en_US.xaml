@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    
+    <x:String x:Key="AllFolders">All folders</x:String>
+    <x:String x:Key="All">All</x:String>
+    <x:String x:Key="Active">Active</x:String>
+    <x:String x:Key="ActiveDownloading">Active downloading</x:String>
+    <x:String x:Key="ActiveSeeding">Active seeding</x:String>
+    <x:String x:Key="Downloading">Downloading</x:String>
+    <x:String x:Key="Seeding">Seeding</x:String>
+    <x:String x:Key="Waiting">Waiting</x:String>
+    <x:String x:Key="Stopped">Stopped</x:String>
+    <x:String x:Key="NoSorting">No sorting</x:String>
+    <x:String x:Key="QueuePosition">Queue position</x:String>
+    <x:String x:Key="Name">Name</x:String>
+    <x:String x:Key="State">Status</x:String>
+    <x:String x:Key="Size">Size</x:String>
+    <x:String x:Key="Progress">Progress</x:String>
+    <x:String x:Key="DownloadSpeed">Download speed</x:String>
+    <x:String x:Key="RemainingTime">Remaining time</x:String>
+    <x:String x:Key="UploadSpeed">Upload speed</x:String>
+    <x:String x:Key="Ratio">Ratio</x:String>
+    <x:String x:Key="DateAdded">Date added</x:String>
+    
+</ResourceDictionary>

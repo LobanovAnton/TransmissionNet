@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                    xmlns:triggers="using:TransmissionNet.Triggers"
+                    xmlns:controls="using:TransmissionNet.Controls"
+                    xmlns:settings="using:TransmissionNet.Settings">
+    
+    <ControlTemplate x:Key="RadioButtonTemplate">
+        <Grid
+            BackgroundColor="Transparent"
+            IsVisible="True"
+            WidthRequest="36"
+            HeightRequest="36"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Padding="10, 10">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CheckedStates">
+                        <VisualState x:Name="Checked">
+                            <VisualState.Setters>
+                                <Setter TargetName="ContentCheck"
+                                        Property="controls:ContentCheckView.IsChecked"
+                                        Value="True" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Unchecked">
+                            <VisualState.Setters>
+                                <Setter TargetName="ContentCheck"
+                                        Property="controls:ContentCheckView.IsChecked"
+                                        Value="False" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+            <Ellipse 
+                IsVisible="True"
+                Stroke="{AppThemeBinding Light={x:StaticResource Primary}, Dark={x:StaticResource PrimaryDark}}"
+                Fill="{AppThemeBinding Light={x:StaticResource Primary}, Dark={x:StaticResource PrimaryDark}}"
+                WidthRequest="32"
+                HeightRequest="32"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+            <controls:ContentCheckView x:Name="ContentCheck"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       WidthRequest="30"
+                                       HeightRequest="30"
+                                       Opacity="0">
+                <controls:ContentCheckView.Triggers>
+                    <EventTrigger Event="CheckedChanged" Actions="{x:Static triggers:ContentIsChecked.Instance}"/>
+                </controls:ContentCheckView.Triggers>
+                <Ellipse 
+                    IsVisible="True"
+                    Fill="{AppThemeBinding Light={x:StaticResource White}, Dark={x:StaticResource White}}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                </Ellipse>
+            </controls:ContentCheckView>
+        </Grid>
+    </ControlTemplate>
+    
+    <DataTemplate x:Key="UrlTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 0" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Entry Keyboard="Url" Grid.Column="1" VerticalOptions="Center"
+                       Text="{Binding Value, Mode=TwoWay}"
+                       Placeholder="{Binding PlaceHolder}">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged" Actions="{x:Static triggers:EntryTextChanged.Instance}"/>
+                    </Entry.Triggers>
+                    <Entry.Behaviors>
+                        <toolkit:UriValidationBehavior Flags="ValidateOnValueChanged"
+                                                       UriKind="Absolute"
+                                                       ValidStyle="{StaticResource ValidEntryStyle}"
+                                                       InvalidStyle="{StaticResource InvalidEntryStyle}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="NumericTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 0" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Entry Keyboard="Numeric" Grid.Column="1" VerticalOptions="Center" 
+                       Text="{Binding Value, Mode=TwoWay}"
+                       Placeholder="{Binding PlaceHolder}">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged" Actions="{x:Static triggers:EntryTextChanged.Instance}"/>
+                    </Entry.Triggers>
+                    <Entry.Behaviors>
+                                <toolkit:NumericValidationBehavior Flags="{OnPlatform Default='ValidateOnValueChanged', 
+                                                                                      iOS='ValidateOnFocused,
+                                                                                           ValidateOnUnfocused'}"
+                                                                   MinimumValue="1"
+                                                                   MaximumValue="65535"
+                                                                   MinimumDecimalPlaces="0"
+                                                                   MaximumDecimalPlaces="0"
+                                                                   ValidStyle="{StaticResource ValidEntryStyle}"
+                                                                   InvalidStyle="{StaticResource InvalidEntryStyle}">
+                                </toolkit:NumericValidationBehavior>
+                            </Entry.Behaviors>
+                </Entry>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="LoginTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 0" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Entry Keyboard="Plain" Grid.Column="1" VerticalOptions="Center" 
+                       Text="{Binding Value, Mode=TwoWay}"
+                       Placeholder="{Binding PlaceHolder}">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged" Actions="{x:Static triggers:EntryTextChanged.Instance}"/>
+                    </Entry.Triggers>
+                    <Entry.Behaviors>
+                        <toolkit:CharactersValidationBehavior Flags="ValidateOnValueChanged"
+                                                              MinimumCharacterTypeCount="0"
+                                                              MaximumCharacterTypeCount="0"
+                                                              CharacterType="Whitespace"
+                                                              ValidStyle="{StaticResource ValidEntryStyle}"
+                                                              InvalidStyle="{StaticResource InvalidEntryStyle}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="PasswordTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 0" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Entry Keyboard="Password" Grid.Column="1" VerticalOptions="Center" 
+                       IsPassword="True"
+                       Text="{Binding Value, Mode=TwoWay}"
+                       Placeholder="{Binding PlaceHolder}">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged" Actions="{x:Static triggers:EntryTextChanged.Instance}"/>
+                    </Entry.Triggers>
+                    <Entry.Behaviors>
+                        <toolkit:CharactersValidationBehavior Flags="ValidateOnValueChanged"
+                                                              MinimumCharacterTypeCount="0"
+                                                              MaximumCharacterTypeCount="0"
+                                                              CharacterType="Whitespace"
+                                                              ValidStyle="{StaticResource ValidEntryStyle}"
+                                                              InvalidStyle="{StaticResource InvalidEntryStyle}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="PathTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 0" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Entry Keyboard="Text" Grid.Column="1" VerticalOptions="Center" 
+                       Text="{Binding Value, Mode=TwoWay}"
+                       Placeholder="{Binding PlaceHolder}">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged" Actions="{x:Static triggers:EntryTextChanged.Instance}"/>
+                    </Entry.Triggers>
+                    <Entry.Behaviors>
+                        <toolkit:UriValidationBehavior Flags="ValidateOnValueChanged"
+                                                       UriKind="Relative"
+                                                       ValidStyle="{StaticResource ValidEntryStyle}"
+                                                       InvalidStyle="{StaticResource InvalidEntryStyle}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="CheckBoxTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 10" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Switch Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start"
+                       IsToggled="{Binding Value, Mode=TwoWay}">
+                </Switch>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="Radio3ButtonTemplate" x:DataType="settings:Radio3SettingViewModel">
+            <Grid Padding="10, 10, 10, 10" HorizontalOptions="Fill" ColumnSpacing="5" RowSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" LineBreakMode="NoWrap" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center"
+                       Text="{Binding Title, Mode=OneWay}"/>
+                <Label Grid.Row="0" Grid.Column="1" LineBreakMode="NoWrap" HorizontalOptions="Start" VerticalOptions="Center"
+                       Text="{Binding Title1, Mode=OneWay}"/>
+                <Label Grid.Row="0" Grid.Column="2" LineBreakMode="NoWrap" HorizontalOptions="Start" VerticalOptions="Center"
+                       Text="{Binding Title2, Mode=OneWay}"/>
+                <Label Grid.Row="0" Grid.Column="3" LineBreakMode="NoWrap" HorizontalOptions="Start" VerticalOptions="Center"
+                       Text="{Binding Title3, Mode=OneWay}"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             GroupName="{Binding Group}"
+                             IsChecked="{Binding IsChecked1}"
+                             ControlTemplate="{x:StaticResource RadioButtonTemplate}">
+                </RadioButton>
+                <RadioButton Grid.Row="1" Grid.Column="2" VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             GroupName="{Binding Group}"
+                             IsChecked="{Binding IsChecked2}"
+                             ControlTemplate="{x:StaticResource RadioButtonTemplate}">
+                </RadioButton>
+                <RadioButton Grid.Row="1" Grid.Column="3" VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             GroupName="{Binding Group}"
+                             IsChecked="{Binding IsChecked3}"
+                             ControlTemplate="{x:StaticResource RadioButtonTemplate}">
+                </RadioButton>
+            </Grid>
+        </DataTemplate>
+        <settings:ValueTypeSelector x:Key="ValueTypeSelector"
+                                    UrlTemplate="{StaticResource UrlTemplate}"
+                                    LoginTemplate="{StaticResource LoginTemplate}"
+                                    PasswordTemplate="{StaticResource PasswordTemplate}"
+                                    NumericTemplate="{StaticResource NumericTemplate}"
+                                    PathTemplate="{StaticResource PathTemplate}"
+                                    CheckBoxTemplate="{StaticResource CheckBoxTemplate}"
+                                    Radio3ButtonTemplate="{StaticResource Radio3ButtonTemplate}"/>
+</ResourceDictionary>

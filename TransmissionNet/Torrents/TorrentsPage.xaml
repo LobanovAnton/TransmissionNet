@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:shell="using:TransmissionNet.Shell"
+             xmlns:torrents="using:TransmissionNet.Torrents"
+             xmlns:providers="using:TransmissionNet.TorrentProviders"
+             xmlns:converters="using:TransmissionNet.Converters"
+             xmlns:controls="using:TransmissionNet.Controls"
+             x:Class="TransmissionNet.Torrents.TorrentsPage"
+             BindingContext="{StaticResource TorrentsViewModel}">
+
+    <ContentPage.ToolbarItems>
+            <ToolbarItem Text="Add" Order="Default"
+                         Command="{Binding x:DataType=torrents:TorrentsViewModel, 
+                         Source={x:StaticResource TorrentsViewModel}, Path=Add}">
+                <ToolbarItem.IconImageSource>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="DarkOliveGreen" FontAutoScalingEnabled="false"
+                                       Glyph="&#xEA06;"/>
+                </ToolbarItem.IconImageSource>
+            </ToolbarItem>
+            <ToolbarItem Text="Start all" Order="Default"
+                         Command="{Binding x:DataType=torrents:TorrentsViewModel, 
+                         Source={x:StaticResource TorrentsViewModel}, Path=StartAll}">
+                <ToolbarItem.IconImageSource>
+                    <FontImageSource FontFamily="Ionicons" Size="32" 
+                                     Color="{AppThemeBinding 
+                                     Light={x:StaticResource Primary},
+                                     Dark={x:StaticResource PrimaryDark}}" 
+                                     FontAutoScalingEnabled="false"
+                                     Glyph="&#xEDE1;"/>
+                </ToolbarItem.IconImageSource>
+            </ToolbarItem>
+            <ToolbarItem Text="Stop all" Order="Default"
+                         Command="{Binding x:DataType=torrents:TorrentsViewModel, 
+                         Source={x:StaticResource TorrentsViewModel}, Path=StopAll}">
+                <ToolbarItem.IconImageSource>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="Peru" FontAutoScalingEnabled="false"
+                                     Glyph="&#xEDA8;"/>
+                </ToolbarItem.IconImageSource>
+            </ToolbarItem>
+            <ToolbarItem Text="Delete all" Order="Default"
+                         Command="{Binding x:DataType=torrents:TorrentsViewModel, 
+                         Source={x:StaticResource TorrentsViewModel}, Path=DeleteAll}">
+                <ToolbarItem.IconImageSource>
+                    <FontImageSource FontFamily="Ionicons" Size="32" Color="DarkRed" FontAutoScalingEnabled="false"
+                                     Glyph="&#xEB5C;"/>
+                </ToolbarItem.IconImageSource>
+            </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <Grid RowSpacing="5"
+          Padding="5, 5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <CollectionView Grid.Row="0"
+                  x:DataType="torrents:TorrentsViewModel"
+                  SelectionMode="None"
+                  ItemsUpdatingScrollMode="KeepScrollOffset"
+                  ItemSizingStrategy="MeasureFirstItem"
+                  ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="torrents:TorrentViewModel">
+                    <Grid HorizontalOptions="Fill">
+                        <Grid.Behaviors>
+                            <toolkit:AnimationBehavior AnimateOnTap="True">
+                                <toolkit:AnimationBehavior.AnimationType>
+                                    <toolkit:FadeAnimation Opacity="0.5"/>
+                                </toolkit:AnimationBehavior.AnimationType>
+                            </toolkit:AnimationBehavior>
+                        </Grid.Behaviors>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Buttons="Primary" CommandParameter="{Binding Mode=TwoWay}"
+                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=Tap}"/>
+                        </Grid.GestureRecognizers>
+                        <FlyoutBase.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Start now" CommandParameter="{Binding Mode=OneWay}"
+                                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=StartNow}"/>
+                                <MenuFlyoutItem Text="Delete" CommandParameter="{Binding Mode=OneWay}"
+                                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=Delete}"/>
+                                <MenuFlyoutItem Text="Delete files" CommandParameter="{Binding Mode=OneWay}"
+                                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=DeleteFiles}"/>
+                                <MenuFlyoutItem Text="Verify" CommandParameter="{Binding Mode=OneWay}"
+                                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=Verify}"/>
+                            </MenuFlyout>
+                        </FlyoutBase.ContextFlyout>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Column="0"
+                              Grid.Row="0"
+                              HorizontalOptions="Start"
+                              VerticalOptions="Center"
+                              Padding="0, 0, 5, 0"
+                              ColumnDefinitions="Auto" RowDefinitions="Auto, Auto">
+                            <ImageButton Grid.Column="0"
+                                         Grid.Row="0"
+                                         HeightRequest="54"
+                                         WidthRequest="54"
+                                         CommandParameter="{Binding Mode=OneWay}"
+                                         Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=ButtonPressed}">
+                                <ImageButton.Source>
+                                    <FontImageSource Size="54"
+                                                     FontFamily="Ionicons" FontAutoScalingEnabled="False"
+                                                     Color="{Binding Status, Converter={x:Static converters:StatusToColorConverter.Instance}}"
+                                                     Glyph="{Binding Status, Converter={x:Static converters:StatusToGlyphConverter.Instance}}"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                            <Label Grid.Row="1"
+                               Text="{Binding Status, Converter={x:Static converters:StatusToStringConverter.Instance}}"
+                               Style="{StaticResource Status}"
+                               LineBreakMode="NoWrap"/>
+                        </Grid>
+                        <SwipeView Grid.Column="1" Grid.Row="0" HorizontalOptions="Fill">
+                            <SwipeView.LeftItems>
+                                <SwipeItems Mode="Reveal" SwipeBehaviorOnInvoked="Close">
+                                    <SwipeItemView>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="0" Text="Start now" TextColor="White"
+                                                    BackgroundColor="{AppThemeBinding 
+                                                    Light={x:StaticResource Primary},
+                                                    Dark={x:StaticResource PrimaryDark}}" 
+                                                VerticalOptions="Fill"
+                                                CommandParameter="{Binding Mode=OneWay}"
+                                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=StartNow}"/>
+                                            <Button Grid.Column="1" Text="Verify data" TextColor="White" 
+                                                BackgroundColor="Peru"
+                                                VerticalOptions="Fill"
+                                                CommandParameter="{Binding Mode=OneWay}"
+                                                Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=Verify}"/>
+                                        </Grid>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal" SwipeBehaviorOnInvoked="RemainOpen">
+                                    <SwipeItemView>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="0" Text="Delete torrent" TextColor="White"
+                                                    BackgroundColor="OrangeRed"
+                                                    VerticalOptions="Fill"
+                                                    CommandParameter="{Binding Mode=OneWay}"
+                                                    Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=Delete}"/>
+                                            <Button Grid.Column="1" Text="Delete with files" TextColor="White"
+                                                    BackgroundColor="DarkRed"
+                                                    VerticalOptions="Fill"
+                                                    CommandParameter="{Binding Mode=OneWay}"
+                                                    Command="{Binding x:DataType=torrents:TorrentsViewModel, Source={x:StaticResource TorrentsViewModel}, Path=DeleteFiles}"/>
+                                        </Grid>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Grid Column="1" VerticalOptions="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0"
+                                       Grid.Row="0"
+                                       Grid.ColumnSpan="4"
+                                       Text="{Binding Name}"
+                                       Style="{StaticResource Headline}"
+                                       LineBreakMode="TailTruncation"
+                                       HorizontalTextAlignment="Start"
+                                       HorizontalOptions="Fill" />
+                                <Label Grid.Row="1"
+                                       Grid.Column="0"
+                                       Style="{StaticResource SubHeadline}"
+                                       LineBreakMode="NoWrap"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat='Downloaded {0} / {1}'>
+                                            <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                                <Binding Path="Downloaded" />
+                                                <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}" 
+                                                         Path="SizeUnits"/>
+                                            </MultiBinding>
+                                            <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                                <Binding Path="TotalSize"/>
+                                                <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}" 
+                                                         Path="SizeUnits"/>
+                                            </MultiBinding>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <Label Grid.Row="2"
+                                       Grid.Column="0"
+                                       Style="{StaticResource SubHeadline}"
+                                       LineBreakMode="NoWrap"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat='Uploaded {0} Ratio {1}'>
+                                            <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                                <Binding Path="Uploaded" />
+                                                <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}" 
+                                                         Path="SizeUnits"/>
+                                            </MultiBinding>
+                                            <Binding Path="UploadRatio" Converter="{x:Static converters:DoubleToStringConverter.Instance}"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <Label Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource SubHeadline}"
+                                       LineBreakMode="NoWrap"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="Rate {0}/s" Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                            <Binding Source="{x:RelativeSource AncestorType={x:Type torrents:TorrentViewModel}}" Path="DownloadRate" />
+                                            <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}" 
+                                                     Path="SizeUnits"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <Image Grid.Row="1" Grid.Column="3"
+                                       HorizontalOptions="End"
+                                       HeightRequest="16">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Ionicons" Size="32" Color="DarkCyan" 
+                                                         FontAutoScalingEnabled="false"
+                                                         Glyph="&#xEA30;"/>
+                                    </Image.Source>
+                                </Image>
+                                <Label Grid.Row="2"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource SubHeadline}"
+                                       LineBreakMode="NoWrap"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="Rate {0}/s" Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                            <Binding Source="{x:RelativeSource AncestorType={x:Type torrents:TorrentViewModel}}" Path="UploadRate" />
+                                            <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}" 
+                                                     Path="SizeUnits"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <Image Grid.Row="2" Grid.Column="3"
+                                       HorizontalOptions="End"
+                                       HeightRequest="16">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="Ionicons" Size="32" Color="CornflowerBlue" 
+                                                         FontAutoScalingEnabled="false"
+                                                         Glyph="&#xEA4E;"/>
+                                    </Image.Source>
+                                </Image>
+                                <Label Grid.Row="3"
+                                       Grid.Column="0"
+                                       Style="{StaticResource SubHeadline}"
+                                       LineBreakMode="NoWrap"
+                                       HorizontalOptions="Start">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsVerifying}"
+                                                     Value="True">
+                                            <Setter Property="Text" Value="{Binding VerifyingProgress, 
+                                                                    Converter={x:Static converters:DoubleToStringPercentConverter.Instance},
+                                                                    StringFormat='{0} %'}"/>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsVerifying}"
+                                                     Value="False">
+                                            <Setter Property="Text" Value="{Binding Progress, 
+                                                                    Converter={x:Static converters:DoubleToStringPercentConverter.Instance},
+                                                                    StringFormat='{0} %'}"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label Grid.Row="3" 
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="3"
+                                       Text="{Binding SecondsRemaining, 
+                                        Converter={x:Static converters:SecondsToStringTimeConverter.Instance},
+                                        StringFormat='Remaining {0}'}"
+                                       Style="{StaticResource SubHeadline}"
+                                       LineBreakMode="NoWrap"
+                                       HorizontalOptions="End" />
+                                <controls:AnimatedProgressBar Grid.Row="4"
+                                             Grid.Column="0"
+                                             Grid.ColumnSpan="4"
+                                             HeightRequest="8">
+                                    <controls:AnimatedProgressBar.Triggers>
+                                        <DataTrigger TargetType="controls:AnimatedProgressBar" Binding="{Binding IsVerifying, Mode=OneWay}"
+                                                     Value="True">
+                                            <Setter Property="AnimatedProgress" Value="{Binding VerifyingProgress}"/>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="controls:AnimatedProgressBar" Binding="{Binding IsVerifying, Mode=OneWay}"
+                                                     Value="False">
+                                            <Setter Property="AnimatedProgress" Value="{Binding Progress}"/>
+                                        </DataTrigger>
+                                    </controls:AnimatedProgressBar.Triggers>
+                                </controls:AnimatedProgressBar>
+                            </Grid>
+                        </SwipeView>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Grid x:DataType="torrents:TorrentsViewModel"
+              Grid.Row="1"
+              Grid.Column="0"
+              HorizontalOptions="Fill"
+              RowSpacing="5"
+              ColumnSpacing="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource BottomLine}"
+                   HorizontalOptions="End"
+                   VerticalOptions="Center"
+                   Text="{Binding Statistic.ActiveTorrentCount,
+                   StringFormat='Active {0}'}" />
+            <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                   Style="{StaticResource BottomLine}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Text="{Binding Statistic.PausedTorrentCount,
+                   StringFormat='Paused {0}'}" />
+            <Label Grid.Row="0" Grid.Column="3"
+                   Style="{StaticResource BottomLine}"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   Text="{Binding Statistic.TorrentCount,
+                   StringFormat='Total {0}'}" />
+            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                   Style="{StaticResource BottomLine}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                <Label.Text>
+                    <MultiBinding StringFormat="Download speed {0}/s" Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                        <Binding Source="{x:StaticResource TorrentsViewModel}" Path="Statistic.DownloadSpeed"/>
+                        <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}"
+                                 Path="SizeUnits"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Label Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Style="{StaticResource BottomLine}">
+                <Label.Text>
+                    <MultiBinding StringFormat="Upload speed {0}/s" Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                        <Binding Source="{x:StaticResource TorrentsViewModel}" Path="Statistic.UploadSpeed" />
+                        <Binding x:DataType="shell:MainShellViewModel" Source="{x:StaticResource MainShellViewModel}" 
+                                 Path="SizeUnits"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+        </Grid>
+    </Grid>
+</ContentPage>

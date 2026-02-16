@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:torrents="using:TransmissionNet.Torrents"
+             xmlns:converters="using:TransmissionNet.Converters"
+             xmlns:shell="using:TransmissionNet.Shell"
+             xmlns:providers="using:TransmissionNet.TorrentProviders"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="using:TransmissionNet.Controls"
+             x:Class="TransmissionNet.Torrents.FilePage"
+             BindingContext="{StaticResource FilePageViewModel}">
+    <Grid x:DataType="torrents:FilePageViewModel" RowDefinitions="Auto, *" RowSpacing="5" Padding="5">
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="5" ColumnSpacing="5">
+            <Label Grid.Column="0"
+                   Text="{Binding Torrent.Name}"
+                   FontSize="14"
+                   LineBreakMode="TailTruncation"
+                   MaxLines="2"
+                   VerticalOptions="Center"/>
+            <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="5">
+                <Label Text="Sequential"
+                       FontSize="12"
+                       VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light=Gray, Dark=LightGray}"/>
+                <Switch IsToggled="{Binding SequentialDownload}"/>
+            </HorizontalStackLayout>
+        </Grid>
+        <CollectionView Grid.Row="1"
+                        x:DataType="torrents:FilePageViewModel"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="torrents:FileViewModel">
+                    <VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto, Auto"
+                          Padding="5, 8" ColumnSpacing="10" RowSpacing="2">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnFileTapped"/>
+                        </Grid.GestureRecognizers>
+                        <Switch Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
+                                IsToggled="{Binding Wanted}"
+                                IsEnabled="{Binding Path=IsCompleted, Converter={toolkit:InvertedBoolConverter}}"
+                                VerticalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="{Binding Name}"
+                               FontSize="14"
+                               LineBreakMode="MiddleTruncation"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light=Gray, Dark=LightGray}">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} / {1}">
+                                    <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                        <Binding Path="BytesCompleted"/>
+                                        <Binding x:DataType="shell:MainShellViewModel"
+                                                 Source="{x:StaticResource MainShellViewModel}"
+                                                 Path="SizeUnits"/>
+                                    </MultiBinding>
+                                    <MultiBinding Converter="{x:Static converters:DecimalToUnitConverter.Instance}">
+                                        <Binding Path="Length"/>
+                                        <Binding x:DataType="shell:MainShellViewModel"
+                                                 Source="{x:StaticResource MainShellViewModel}"
+                                                 Path="SizeUnits"/>
+                                    </MultiBinding>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding Progress, StringFormat='{0:P0}'}"
+                               FontSize="12"
+                               HorizontalTextAlignment="End"
+                               TextColor="{AppThemeBinding Light=Gray, Dark=LightGray}"/>
+                        <controls:AnimatedProgressBar Grid.Row="2" Grid.Column="1"
+                                     AnimatedProgress="{Binding Progress}"/>
+                        <HorizontalStackLayout Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
+                                               VerticalOptions="Center" Spacing="2">
+                            <Button Text="▲"
+                                    FontSize="10"
+                                    Padding="6,0"
+                                    Clicked="OnPriorityClicked"
+                                    ClassId="High">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding Priority}" Value="{x:Static providers:FilePriority.High}">
+                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button Text="■"
+                                    FontSize="10"
+                                    Padding="6,0"
+                                    Clicked="OnPriorityClicked"
+                                    ClassId="Normal">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding Priority}" Value="{x:Static providers:FilePriority.Normal}">
+                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button Text="▼"
+                                    FontSize="10"
+                                    Padding="6,0"
+                                    Clicked="OnPriorityClicked"
+                                    ClassId="Low">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding Priority}" Value="{x:Static providers:FilePriority.Low}">
+                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <torrents:PieceMapView IsVisible="{Binding IsExpanded}"
+                                           BeginPiece="{Binding BeginPiece}"
+                                           PieceCount="{Binding PieceCount}"
+                                           Margin="5,0,5,5"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

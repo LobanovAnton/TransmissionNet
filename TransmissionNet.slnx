@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="../Transmission.API.RPC.NET/Transmission.API.RPC.csproj" />
+  <Project Path="TransmissionNet\TransmissionNet.csproj">
+    <Configuration Solution="Debug|Any CPU" Project="Debug|Any CPU|Deploy" />
+    <Configuration Solution="Release|Any CPU" Project="Release|Any CPU|Deploy" />
+  </Project>
+</Solution>
