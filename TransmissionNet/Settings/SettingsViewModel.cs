@@ -25,7 +25,8 @@ public static class SettingViewModels
     public static readonly SettingViewModel Password = new(){Entry = SettingEntries.Password, Title = "Password", ValueType = ValueType.Password, PlaceHolder = "Please enter your password"};
     public static readonly SettingViewModel UpdateInterval = new(){Entry = SettingEntries.UpdateInterval, Title = "Update interval", ValueType = ValueType.AsciiDigit, PlaceHolder = "Please enter update interval"};
     public static readonly SettingViewModel DeleteTorrentFile = new(){Entry = SettingEntries.DeleteTorrentFile, Title = "Delete torrent file", ValueType = ValueType.CheckBox};
-    
+    public static readonly SettingViewModel ShowAddTorrentOptions = new(){Entry = SettingEntries.ShowAddTorrentOptions, Title = "Show add torrent options", ValueType = ValueType.CheckBox};
+
     public static readonly SettingViewModel CacheSize = new(){Entry = SettingEntries.CacheSize, Title = "Cache size", ValueType = ValueType.AsciiDigit};
     public static readonly SettingViewModel CompletePath = new(){Entry = SettingEntries.CompletePath, Title = "Complete directory", ValueType = ValueType.Path};
     public static readonly SettingViewModel InCompletePathEnabled = new(){Entry = SettingEntries.InCompletePathEnabled, Title = "Incomplete directory enabled", ValueType = ValueType.CheckBox};
@@ -53,7 +54,7 @@ public static class SettingViewModels
             Title3 = nameof(Encryption.Allowed),
         };
     
-    public static readonly SettingViewModel[] ApplicationSettings = [Url, Port, RpcPath, Login, Password, UpdateInterval, DeleteTorrentFile];
+    public static readonly SettingViewModel[] ApplicationSettings = [Url, Port, RpcPath, Login, Password, UpdateInterval, DeleteTorrentFile, ShowAddTorrentOptions];
     public static readonly SettingViewModel[] TorrentSettings = [CompletePath, InCompletePathEnabled, InCompletePath, CacheSize,
                                                                  DownloadQueueEnabled, DownloadQueueSize,
                                                                  SeedQueueEnabled, SeedQueueSize,

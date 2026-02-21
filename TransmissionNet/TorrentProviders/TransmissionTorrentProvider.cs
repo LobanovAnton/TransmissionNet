@@ -282,12 +282,17 @@ public class TransmissionTorrentProvider(string url, string username, string pas
         return _client.TorrentSetAsync(settings, cancellationToken);
     }
 
-    public Task AddTorrentAsync(string metaInfo, CancellationToken cancellationToken = default)
+    public Task AddTorrentAsync(string metaInfo, AddTorrentOptions? options = null, CancellationToken cancellationToken = default)
     {
-        NewTorrent torrent = new NewTorrent
+        NewTorrent torrent = new NewTorrent { Metainfo = metaInfo };
+
+        if (options != null)
         {
-            Metainfo = metaInfo
-        };
+            torrent.DownloadDirectory = options.DownloadDirectory;
+            torrent.Paused = options.Paused;
+            torrent.SequentialDownload = options.SequentialDownload;
+        }
+
         return _client.TorrentAddAsync(torrent, cancellationToken);
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="TransmissionNet.Torrents.AddTorrentPopup"
+             Title="Add Torrent">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+
+        <Label Grid.Row="0" Text="Add Torrent"
+               FontFamily="OpenSansSemibold"
+               FontSize="20"
+               HorizontalOptions="Center"
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+
+        <VerticalStackLayout Grid.Row="1" Spacing="12" VerticalOptions="Center">
+
+            <Grid ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Download Directory" VerticalOptions="Center" LineBreakMode="NoWrap"/>
+                <Entry x:Name="DirectoryEntry" Grid.Column="1" Keyboard="Text" VerticalOptions="Center">
+                    <Entry.Behaviors>
+                        <toolkit:UriValidationBehavior Flags="ValidateOnValueChanged"
+                                                       UriKind="Relative"
+                                                       ValidStyle="{StaticResource ValidEntryStyle}"
+                                                       InvalidStyle="{StaticResource InvalidEntryStyle}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Grid>
+
+            <Grid ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Paused" VerticalOptions="Center" LineBreakMode="NoWrap"/>
+                <Switch x:Name="PausedSwitch" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+            </Grid>
+
+            <Grid ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Sequential Download" VerticalOptions="Center" LineBreakMode="NoWrap"/>
+                <Switch x:Name="SequentialSwitch" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+            </Grid>
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                <Button Text="Cancel" Clicked="OnCancelClicked"/>
+                <Button Text="Add" Clicked="OnAddClicked"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

@@ -87,7 +87,21 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
                 PickerTitle = "Torrents"
             };
 
-            IEnumerable<FileResult?> results = await FilePicker.PickMultipleAsync(options);
+            FileResult?[] results = (await FilePicker.PickMultipleAsync(options)).ToArray();
+            if (results.Length == 0)
+                return;
+
+            AddTorrentOptions? addOptions = null;
+
+            if ((bool)SettingEntries.ShowAddTorrentOptions.Value)
+            {
+                AddTorrentPopup page = new();
+                addOptions = await page.Show((string)SettingEntries.CompletePath.Value);
+
+                if (addOptions != null)
+                    return;
+            }
+
             foreach (FileResult? fileResult in results)
             {
                 if (fileResult != null)
@@ -97,7 +111,7 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
                         byte[] bytes = new byte[stream.Length];
                         await stream.ReadExactlyAsync(bytes);
                         string metaInfo = Convert.ToBase64String(bytes);
-                        await Provider.AddTorrentAsync(metaInfo);
+                        await Provider.AddTorrentAsync(metaInfo, addOptions);
                     }
 
                     if ((bool)SettingEntries.DeleteTorrentFile.Value && File.Exists(fileResult.FullPath))

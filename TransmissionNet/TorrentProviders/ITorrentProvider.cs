@@ -35,7 +35,7 @@ public interface ITorrentProvider
 
     Task SetTorrentSettingsAsync(TorrentSettingsModel settings, CancellationToken cancellationToken = default);
 
-    Task AddTorrentAsync(string metaInfo, CancellationToken cancellationToken = default);
+    Task AddTorrentAsync(string metaInfo, AddTorrentOptions? options = null, CancellationToken cancellationToken = default);
 
     Task StartNowTorrentAsync(int id, CancellationToken cancellationToken = default);
 
