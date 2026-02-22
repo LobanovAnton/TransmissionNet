@@ -10,8 +10,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
-        <ApplicationDisplayVersion>1.3.5</ApplicationDisplayVersion>
-        <ApplicationVersion>1.3.5</ApplicationVersion>
+        <ApplicationDisplayVersion>1.3.6</ApplicationDisplayVersion>
+        <ApplicationVersion>1.3.6</ApplicationVersion>
 
         <!-- Display name -->
         <ApplicationTitle>TransmissionNet</ApplicationTitle>
