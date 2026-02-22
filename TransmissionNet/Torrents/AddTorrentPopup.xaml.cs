@@ -16,8 +16,6 @@ public partial class AddTorrentPopup
     {
         DirectoryEntry.Text = downloadDirectory;
         await Current.Navigation.PushModalAsync(this);
-        PausedSwitch.IsToggled = false;
-        SequentialSwitch.IsToggled = false;
         return await _tcs.Task;
     }
 

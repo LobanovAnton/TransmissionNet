@@ -98,7 +98,7 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
                 AddTorrentPopup page = new();
                 addOptions = await page.Show((string)SettingEntries.CompletePath.Value);
 
-                if (addOptions != null)
+                if (addOptions == null)
                     return;
             }
 
