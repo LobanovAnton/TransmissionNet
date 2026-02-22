@@ -5,7 +5,7 @@
              x:Class="TransmissionNet.Torrents.AddTorrentPopup"
              Title="Add Torrent">
 
-    <Grid RowDefinitions="Auto,*" Padding="20">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="12">
 
         <Label Grid.Row="0" Text="Add Torrent"
                FontFamily="OpenSansSemibold"
@@ -13,7 +13,7 @@
                HorizontalOptions="Center"
                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
 
-        <VerticalStackLayout Grid.Row="1" Spacing="12" VerticalOptions="Center">
+        <VerticalStackLayout Grid.Row="1" Spacing="12">
 
             <Grid ColumnSpacing="5">
                 <Grid.ColumnDefinitions>
@@ -55,6 +55,38 @@
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
+
+        <!-- Movie description area -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout x:Name="MoviePanel" Spacing="8" IsVisible="False">
+
+                <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True" IsVisible="False"
+                                   Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Image x:Name="PosterImage" Grid.Column="0" WidthRequest="120" HeightRequest="180" Aspect="AspectFill"/>
+                    <VerticalStackLayout Grid.Column="1" Spacing="16" VerticalOptions="Start">
+                        <Label x:Name="TitleLabel" FontFamily="OpenSansSemibold" FontSize="18" LineBreakMode="WordWrap"/>
+                        <Label x:Name="GenresLabel" FontSize="13" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"/>
+                        <Label x:Name="RatingLabel" FontSize="14" FontFamily="OpenSansSemibold"/>
+                        <Grid x:Name="DirectorPanel" ColumnDefinitions="Auto,Auto" ColumnSpacing="8">
+                            <Image x:Name="DirectorPhoto" Grid.Column="0" WidthRequest="64" HeightRequest="64" Aspect="AspectFill" VerticalOptions="Center">
+                                <Image.Clip>
+                                    <EllipseGeometry Center="32,32" RadiusX="32" RadiusY="32"/>
+                                </Image.Clip>
+                            </Image>
+                            <Label x:Name="DirectorLabel" Grid.Column="1" FontSize="14" VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Label x:Name="DescriptionLabel" FontSize="14" LineBreakMode="WordWrap"/>
+
+                <Label x:Name="ActorsHeader" Text="Актёры" FontFamily="OpenSansSemibold" FontSize="16" Margin="0,8,0,4" IsVisible="False"/>
+                <VerticalStackLayout x:Name="ActorsPanel" Spacing="6"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
 
     </Grid>
 

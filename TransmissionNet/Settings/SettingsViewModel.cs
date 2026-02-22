@@ -13,7 +13,8 @@ public enum ValueType
     Path,
     AsciiDigit,
     CheckBox,
-    Radio3Button
+    Radio3Button,
+    Text
 }
 
 public static class SettingViewModels
@@ -26,6 +27,7 @@ public static class SettingViewModels
     public static readonly SettingViewModel UpdateInterval = new(){Entry = SettingEntries.UpdateInterval, Title = "Update interval", ValueType = ValueType.AsciiDigit, PlaceHolder = "Please enter update interval"};
     public static readonly SettingViewModel DeleteTorrentFile = new(){Entry = SettingEntries.DeleteTorrentFile, Title = "Delete torrent file", ValueType = ValueType.CheckBox};
     public static readonly SettingViewModel ShowAddTorrentOptions = new(){Entry = SettingEntries.ShowAddTorrentOptions, Title = "Show add torrent options", ValueType = ValueType.CheckBox};
+    public static readonly SettingViewModel KinopoiskApiKey = new(){Entry = SettingEntries.KinopoiskApiKey, Title = "Kinopoisk API key", ValueType = ValueType.Text, PlaceHolder = "Token from @kinopoiskdev_bot"};
 
     public static readonly SettingViewModel CacheSize = new(){Entry = SettingEntries.CacheSize, Title = "Cache size", ValueType = ValueType.AsciiDigit};
     public static readonly SettingViewModel CompletePath = new(){Entry = SettingEntries.CompletePath, Title = "Complete directory", ValueType = ValueType.Path};
@@ -54,7 +56,7 @@ public static class SettingViewModels
             Title3 = nameof(Encryption.Allowed),
         };
     
-    public static readonly SettingViewModel[] ApplicationSettings = [Url, Port, RpcPath, Login, Password, UpdateInterval, DeleteTorrentFile, ShowAddTorrentOptions];
+    public static readonly SettingViewModel[] ApplicationSettings = [Url, Port, RpcPath, Login, Password, UpdateInterval, DeleteTorrentFile, ShowAddTorrentOptions, KinopoiskApiKey];
     public static readonly SettingViewModel[] TorrentSettings = [CompletePath, InCompletePathEnabled, InCompletePath, CacheSize,
                                                                  DownloadQueueEnabled, DownloadQueueSize,
                                                                  SeedQueueEnabled, SeedQueueSize,
@@ -160,7 +162,9 @@ public class ValueTypeSelector : DataTemplateSelector
     public DataTemplate? CheckBoxTemplate { get; set; }
     
     public DataTemplate? Radio3ButtonTemplate { get; set; }
-    
+
+    public DataTemplate? TextTemplate { get; set; }
+
     protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
     {
         ValueType valueType = ((SettingViewModel)item).ValueType;
@@ -173,6 +177,7 @@ public class ValueTypeSelector : DataTemplateSelector
             ValueType.Path => PathTemplate,
             ValueType.CheckBox => CheckBoxTemplate,
             ValueType.Radio3Button => Radio3ButtonTemplate,
+            ValueType.Text => TextTemplate,
             _ => throw new ArgumentOutOfRangeException()
         };
     }

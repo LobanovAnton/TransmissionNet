@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using TransmissionNet.Shell;
 using TransmissionNet.TorrentProviders;
 using TransmissionNet.Extensions;
+using TransmissionNet.Services;
 using TransmissionNet.Settings;
 
 namespace TransmissionNet.Torrents;
@@ -17,6 +18,7 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
         TorrentField.AddedDate, TorrentField.QueuePosition, TorrentField.DownloadDir
     ];
 
+    private IMovieService? _movieService;
     private readonly Func<TorrentModel, bool> _filterFunc;
     private readonly Func<TorrentModel, bool> _pathFilterFunc;
     private StatisticModel _statistic = StatisticModel.Empty;
@@ -58,6 +60,7 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
 
     protected override Task OnInitializeAsync()
     {
+        _movieService = new KinoPoiskService((string)SettingEntries.KinopoiskApiKey.Value);
         _filterState = FilterSortSettings.FilterState;
         _sortRule = FilterSortSettings.SortRule;
         _sortMode = FilterSortSettings.SortMode;
@@ -96,7 +99,7 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
             if ((bool)SettingEntries.ShowAddTorrentOptions.Value)
             {
                 AddTorrentPopup page = new();
-                addOptions = await page.Show((string)SettingEntries.CompletePath.Value);
+                addOptions = await page.Show((string)SettingEntries.CompletePath.Value, results[0]!.FileName, _movieService);
 
                 if (addOptions == null)
                     return;

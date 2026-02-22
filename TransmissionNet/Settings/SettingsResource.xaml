@@ -235,6 +235,22 @@
                 </RadioButton>
             </Grid>
         </DataTemplate>
+        <DataTemplate x:Key="TextTemplate" x:DataType="settings:SettingViewModel">
+            <Grid Padding="10, 0" HorizontalOptions="Fill" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label LineBreakMode="NoWrap" Grid.Column="0" VerticalOptions="Center" Text="{Binding Title, Mode=OneWay}"/>
+                <Entry Keyboard="Text" Grid.Column="1" VerticalOptions="Center"
+                       Text="{Binding Value, Mode=TwoWay}"
+                       Placeholder="{Binding PlaceHolder}">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged" Actions="{x:Static triggers:EntryTextChanged.Instance}"/>
+                    </Entry.Triggers>
+                </Entry>
+            </Grid>
+        </DataTemplate>
         <settings:ValueTypeSelector x:Key="ValueTypeSelector"
                                     UrlTemplate="{StaticResource UrlTemplate}"
                                     LoginTemplate="{StaticResource LoginTemplate}"
@@ -242,5 +258,6 @@
                                     NumericTemplate="{StaticResource NumericTemplate}"
                                     PathTemplate="{StaticResource PathTemplate}"
                                     CheckBoxTemplate="{StaticResource CheckBoxTemplate}"
-                                    Radio3ButtonTemplate="{StaticResource Radio3ButtonTemplate}"/>
+                                    Radio3ButtonTemplate="{StaticResource Radio3ButtonTemplate}"
+                                    TextTemplate="{StaticResource TextTemplate}"/>
 </ResourceDictionary>

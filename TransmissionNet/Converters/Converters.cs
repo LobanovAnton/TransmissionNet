@@ -4,7 +4,7 @@ using TransmissionNet.TorrentProviders;
 
 namespace TransmissionNet.Converters;
 
-public static class ConverterHelper
+file static class ConverterHelper
 {
     private static readonly string[] Units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     

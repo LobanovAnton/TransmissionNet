@@ -26,6 +26,7 @@ public static class SettingEntries
     public static readonly SettingEntry UpdateInterval = new(){Key = nameof(UpdateInterval), DefaultValue = 5};
     public static readonly SettingEntry DeleteTorrentFile = new(){Key = nameof(DeleteTorrentFile), DefaultValue = false};
     public static readonly SettingEntry ShowAddTorrentOptions = new(){Key = nameof(ShowAddTorrentOptions), DefaultValue = false};
+    public static readonly SettingEntry KinopoiskApiKey = new(){Key = nameof(KinopoiskApiKey), DefaultValue = ""};
 
     public static readonly SettingEntry CacheSize = new(){Key = nameof(SessionModel.CacheSize), DefaultValue = 16};
     public static readonly SettingEntry CompletePath = new(){Key = nameof(SessionModel.CompletePath), DefaultValue = ""};
@@ -43,7 +44,7 @@ public static class SettingEntries
     public static readonly SettingEntry PeerPort = new(){Key = nameof(SessionModel.PeerPort), DefaultValue = 51413};
     public static readonly SettingEntry PortForwardingEnabled = new(){Key = nameof(SessionModel.PortForwardingEnabled), DefaultValue = false};
     
-    private static readonly SettingEntry[] ApplicationSettings = [Url, Port, RpcPath, Login, Password, UpdateInterval, DeleteTorrentFile, ShowAddTorrentOptions];
+    private static readonly SettingEntry[] ApplicationSettings = [Url, Port, RpcPath, Login, Password, UpdateInterval, DeleteTorrentFile, ShowAddTorrentOptions, KinopoiskApiKey];
     private static readonly SettingEntry[] TorrentSettings = [CacheSize, CompletePath, InCompletePathEnabled, InCompletePath, 
                                                               UsePex, UseLpd, UseDht, UseUdp,
                                                               EncryptionMode, DownloadQueueEnabled, DownloadQueueSize,
