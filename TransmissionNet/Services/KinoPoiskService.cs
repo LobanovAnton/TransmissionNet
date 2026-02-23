@@ -6,7 +6,7 @@ namespace TransmissionNet.Services;
 
 public partial class KinoPoiskService(string apiKey) : IMovieService
 {
-    private static readonly HttpClient Client = new() { BaseAddress = new Uri("https://api.kinopoisk.dev/") };
+    private static readonly HttpClient Client = new() { BaseAddress = new Uri("https://api.poiskkino.dev/") };
 
     public async Task<MovieInfo?> SearchAsync(string torrentName, CancellationToken cancellationToken = default)
     {
@@ -63,7 +63,7 @@ public partial class KinoPoiskService(string apiKey) : IMovieService
         using HttpRequestMessage request = new(HttpMethod.Get, url);
         request.Headers.Add("X-API-KEY", apiKey);
 
-        using HttpResponseMessage response = await Task.Run(() => Client.SendAsync(request, cancellationToken), cancellationToken);
+        using HttpResponseMessage response = await Client.SendAsync(request, cancellationToken);
         if (!response.IsSuccessStatusCode)
             return default;
 
