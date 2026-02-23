@@ -90,8 +90,8 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
                 PickerTitle = "Torrents"
             };
 
-            FileResult?[] results = (await FilePicker.PickMultipleAsync(options)).ToArray();
-            if (results.Length == 0)
+            FileResult? result = await FilePicker.PickAsync(options);
+            if (result == null)
                 return;
 
             AddTorrentOptions? addOptions = null;
@@ -99,28 +99,22 @@ public class TorrentsViewModel: UpdatableShellPageViewModel
             if ((bool)SettingEntries.ShowAddTorrentOptions.Value)
             {
                 AddTorrentPopup page = new();
-                addOptions = await page.Show((string)SettingEntries.CompletePath.Value, results[0]!.FileName, _movieService);
+                addOptions = await page.Show((string)SettingEntries.CompletePath.Value, result.FileName, _movieService);
 
                 if (addOptions == null)
                     return;
             }
 
-            foreach (FileResult? fileResult in results)
+            await using (Stream stream = await result.OpenReadAsync())
             {
-                if (fileResult != null)
-                {
-                    await using (Stream stream = await fileResult.OpenReadAsync())
-                    {
-                        byte[] bytes = new byte[stream.Length];
-                        await stream.ReadExactlyAsync(bytes);
-                        string metaInfo = Convert.ToBase64String(bytes);
-                        await Provider.AddTorrentAsync(metaInfo, addOptions);
-                    }
-
-                    if ((bool)SettingEntries.DeleteTorrentFile.Value && File.Exists(fileResult.FullPath))
-                        File.Delete(fileResult.FullPath);
-                }
+                byte[] bytes = new byte[stream.Length];
+                await stream.ReadExactlyAsync(bytes);
+                string metaInfo = Convert.ToBase64String(bytes);
+                await Provider.AddTorrentAsync(metaInfo, addOptions);
             }
+
+            if ((bool)SettingEntries.DeleteTorrentFile.Value && File.Exists(result.FullPath))
+                File.Delete(result.FullPath);
             _ = UpdateAsync();
         }
         catch (Exception)
