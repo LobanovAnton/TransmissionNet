@@ -19,8 +19,8 @@ public partial class AddTorrentPopup
         DirectoryEntry.Text = downloadDirectory;
         await Current.Navigation.PushModalAsync(this);
         _cts = new CancellationTokenSource();
-        if (movieService != null)
-            _ = LoadMovieInfoAsync(movieService, torrentName, _cts.Token);
+        if (movieService != null) 
+            _ =  LoadMovieInfoAsync(movieService, torrentName, _cts.Token);
         return await _tcs.Task;
     }
 
@@ -93,6 +93,12 @@ public partial class AddTorrentPopup
                     ActorsPanel.Children.Add(actorGrid);
                 }
             }
+
+            LoadingIndicator.IsVisible = false;
+            LoadingIndicator.IsRunning = false;
+            MoviePanel.IsVisible = true;
+            MoviePanel.Opacity = 0;
+            await MoviePanel.FadeToAsync(1, 500);
         }
         catch (OperationCanceledException) { }
         finally
