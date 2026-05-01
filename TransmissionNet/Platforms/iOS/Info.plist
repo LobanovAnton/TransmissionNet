@@ -72,10 +72,12 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string></string>
+	<string>TransmissionNet</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 	</array>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 </dict>
 </plist>
