@@ -28,6 +28,10 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <!-- Enable the Mono interpreter so reflection-invoked dynamic methods
+             (e.g. MAUI AppThemeBinding -> Brush.op_Implicit) work under sideloading
+             (AltStore/SideStore), where JIT is unavailable (aot-only mode). -->
+        <MtouchInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">-all</MtouchInterpreter>
     </PropertyGroup>
 
     <ItemGroup>
