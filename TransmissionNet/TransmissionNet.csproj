@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+        <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+    </PropertyGroup>
+    
     <PropertyGroup>
-        <TargetFrameworks>net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks>net11.0-ios;net11.0-maccatalyst</TargetFrameworks>
         <ValidateXcodeVersion>false</ValidateXcodeVersion>
         <OutputType>Exe</OutputType>
         <RootNamespace>TransmissionNet</RootNamespace>
@@ -24,16 +28,6 @@
         <NeutralLanguage>en</NeutralLanguage>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <!-- Enable the Mono interpreter so reflection-invoked dynamic methods
-             (e.g. MAUI AppThemeBinding -> Brush.op_Implicit) work under sideloading
-             (AltStore/SideStore), where JIT is unavailable (aot-only mode). -->
-        <MtouchInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">-all</MtouchInterpreter>
-    </PropertyGroup>
-
     <ItemGroup>
         <!-- App Icon -->
         <MauiIcon Include="Resources\AppIcon\appicon.png"/>
@@ -52,11 +46,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Maui" Version="14.0.0" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.40" />
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.40" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Maui.Core" Version="10.0.40" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.120" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.120" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.14" />
+        <PackageReference Include="Microsoft.Maui.Core" Version="10.0.120" />
     </ItemGroup>
 
     <ItemGroup>
